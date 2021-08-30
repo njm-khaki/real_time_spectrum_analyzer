@@ -53,7 +53,7 @@ class SpectrumAnalyzerViewModel with ChangeNotifier {
       // パワースペクトルを単位(dB)に変換する
       // 参考 : https://marui.hatenablog.com/entry/2019/12/20/071400
       final _power = (_fft[i] * _fft[i].conjugate).real / _analyzer.wave.length;
-      _spectrum.add(10 * (log(_power) / log(10)));
+      _spectrum.add(-10 * (log(_power) / log(10)));
     }
 
     _analyzer.spectrum = _spectrum;

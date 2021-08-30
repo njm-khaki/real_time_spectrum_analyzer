@@ -26,55 +26,36 @@ class SpectrumPainter extends CustomPainter {
     );
     _canvas.drawRect(_plotFrame, _background);
 
-    for (int i = 0; i < data.length; i++) {
-      if (i == 0) {
-        continue;
-      }
-
-      /// リストの最大値と最小値を取得
-      final double _max = data.reduce(max);
-      final double _min = data.reduce(min);
-
-      final Offset _from = _dataMapping(
-        size: _size,
-        x: (i - 1) / data.length,
-        y: _mappingRate(
-          value: data[i - 1],
-          max: _max,
-          min: _min,
+    final _path = Path()
+      ..addPolygon(
+        _createPolygon(
+          size: _size,
+          data: data,
         ),
+        false,
       );
-
-      final Offset _to = _dataMapping(
-        size: _size,
-        x: i / data.length,
-        y: _mappingRate(
-          value: data[i],
-          max: _max,
-          min: _min,
-        ),
-      );
-
-      _paintLine(
-        canvas: _canvas,
-        color: Colors.black,
-        from: _from,
-        to: _to,
-      );
-    }
+    _canvas.drawPath(_path, Paint()..color = Colors.black);
   }
 
-  void _paintLine({
-    @required Canvas canvas,
-    @required Color color,
-    @required Offset to,
-    Offset from = Offset.zero,
+  List<Offset> _createPolygon({
+    @required Size size,
+    @required List<double> data,
   }) =>
-      canvas.drawLine(
-        from,
-        to,
-        Paint()..color = color,
-      );
+      data
+          .asMap()
+          .entries
+          .map(
+            (_item) => _dataMapping(
+              size: size,
+              x: _item.key / data.length,
+              y: _mappingRate(
+                value: _item.value,
+                max: data.reduce(max),
+                min: data.reduce(min),
+              ),
+            ),
+          )
+          .toList();
 
   double _mappingRate({
     @required double value,
@@ -89,5 +70,5 @@ class SpectrumPainter extends CustomPainter {
     @required double x,
     @required double y,
   }) =>
-      Offset(size.width * x, size.height - size.height * y);
+      Offset(size.width * x, size.height * y);
 }

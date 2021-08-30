@@ -34,7 +34,14 @@ class SpectrumPainter extends CustomPainter {
         ),
         false,
       );
-    _canvas.drawPath(_path, Paint()..color = Colors.black);
+
+    _canvas.drawPath(
+        _path,
+        Paint()
+          ..color = Colors.black
+          ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round,
+    );
   }
 
   List<Offset> _createPolygon({

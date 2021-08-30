@@ -47,7 +47,7 @@ class SpectrumAnalyzerViewModel with ChangeNotifier {
     final _fft = FFT().Transform(_sample);
 
     /// スペクトルを格納用
-    List<double> _spectrum = [];
+    final List<double> _spectrum = [];
 
     for (int i = 0; i < _analyzer.wave.length / 2; i++) {
       // パワースペクトルを単位(dB)に変換する
